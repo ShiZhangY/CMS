@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+
+  <link rel="stylesheet" href="./assets/lib/toastr/toastr.min.css" />
+  <link rel="stylesheet" href="./assets/iconfont/iconfont.css" />
+  <!-- 引入进度条的样式 -->
+  <link rel="stylesheet" href="./assets/lib/NProgress/NProgress.css" />
+  <link rel="stylesheet" href="./assets/css/dashboard.css" />
+</head>
+
+<body>
+  <div class="cms-nav"
+    style="display: flex;height: 50px;background-color: seashell; justify-content: space-around;align-items: center;">
+    <a style="text-decoration: none;color:blueviolet;font-size: 20px;" href="dashboard.html">图表概览</a>
+    <a style="text-decoration: none;color:blueviolet;font-size: 20px;" href="score.html">成绩管理</a>
+    <a style="text-decoration: none;color:blueviolet;font-size: 20px;" href="student.html">学生管理</a>
+    <a style="text-decoration: none;color:blueviolet;font-size: 20px;" href="javascript:;"
+      onclick="localStorage.removeItem('cms90');location.href='login.html'">退出登录</a>
+    <a style="text-decoration: none;color:blueviolet;font-size: 20px;" href="javascript:;"
+      onclick="axios({ url: '/init/data' }).then(()=>location.reload())">初始化数据</a>
+  </div>
+  <h1>Dashboard</h1>
+  <div class="main">
+    <div class="row">
+      <div class="overview">
+        <div class="panel item">
+          <h4>班级人数</h4>
+          <!-- <div class="total">84</div> -->
+          <div class="total"></div>
+        </div>
+        <div class="panel item">
+          <h4>期望薪资</h4>
+          <!-- <div class="avgSalary">14,378</div> -->
+          <div class="avgSalary"></div>
+        </div>
+        <div class="panel item">
+          <h4>平均年龄</h4>
+          <!-- <div class="avgAge">22.78</div> -->
+          <div class="avgAge"></div>
+        </div>
+        <div class="panel item">
+          <h4>男女比例</h4>
+          <!-- <div class="proportion">1.1</div> -->
+          <div class="proportion"></div>
+        </div>
+      </div>
+      <div class="panel line"></div>
+    </div>
+    <div class="row">
+      <div class="panel bar">
+        <div class="title">
+          <h2>成绩 Score</h2>
+          <span class="iconfont icon-youcecaidan btn" id="toggleBatchBtn"></span>
+          <ul id="batch">
+            <li><a data-index="1" href="javascript:;">第1次成绩</a></li>
+            <li><a data-index="2" href="javascript:;">第2次成绩</a></li>
+            <li><a data-index="3" href="javascript:;">第3次成绩</a></li>
+            <li><a data-index="4" href="javascript:;">第4次成绩</a></li>
+            <li><a data-index="5" href="javascript:;">第5次成绩</a></li>
+          </ul>
+        </div>
+        <div class="barChart"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="panel map">xxx</div>
+      <div class="panel pie">yyy</div>
+    </div>
+  </div>
+
+  <script src="./assets/lib/echarts/echarts.min.js"></script>
+  <script src="./assets/lib/jquery-3.6.0.min.js"></script>
+  <script src="./assets/lib/toastr/toastr.min.js"></script>
+  <script src="./assets/lib/axios.js"></script>
+  <script src="./assets/lib/data.js"></script>
+  <!-- 引入进度条 -->
+  <script src="./assets/lib/NProgress/NProgress.js"></script>
+  <!-- 引入公共的 js -->
+  <script src="./assets/js/common.js"></script>
+  <!-- 当前页面自己的js -->
+  <script src="./assets/js/dashboard.js"></script>
+</body>
+
+</html>
