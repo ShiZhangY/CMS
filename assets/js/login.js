@@ -21,6 +21,7 @@ const loginForm = document.querySelector('.login form.container')//登录表单
 const registerBtn = document.querySelector('.register .btn-primary')//注册按钮
 const registerForm = document.querySelector('.register form.container')//注册表单
 
+//登录功能
 loginBtn.addEventListener('click', function (e) {
     e.preventDefault()
     let data = serialize(loginForm, { hash: true, empty: true })
@@ -37,8 +38,10 @@ loginBtn.addEventListener('click', function (e) {
         url: 'api/login',
         data
     }).then(res => {
+        console.log(res);
         if (res.data.code == 0) {
             toastr.success('登录成功')
+            localStorage.setItem('token', res.data.token)
             setTimeout(() => {
                 location.href = 'dashboard.html'
             }, 1000);
@@ -49,6 +52,7 @@ loginBtn.addEventListener('click', function (e) {
         console.dir(error);
     })
 })
+//注册功能
 registerBtn.addEventListener('click', function (e) {
     e.preventDefault()
     let data = serialize(registerForm, { hash: true, empty: true })
