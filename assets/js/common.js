@@ -12,7 +12,6 @@ function checkLogin() {
 axios.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
     //设置请求头发送请求携带的token
-    console.log(config);
     if (localStorage.getItem('token')) {
         config.headers.Authorization = localStorage.getItem('token')
     }
