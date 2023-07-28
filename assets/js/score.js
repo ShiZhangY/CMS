@@ -44,15 +44,14 @@ tbody.addEventListener('blur', async function (e) {
                 "score": e.target.value
             }
             await axios({ url: 'score/entry', method: 'post', data })
-            e.target.parentNode.removeChild(e.target);
-            toastr.success('修改成功')
             setTimeout(() => {
-                renderScoreData()
-            }, 200);
+                e.target.parentNode.removeChild(e.target);
+            }, 100);
+            toastr.success('修改成功')
+            renderScoreData()
         }
     } catch (error) {
         toastr.error('成绩必须1-100之间')
         console.dir(error);
     }
-
 }, true)
