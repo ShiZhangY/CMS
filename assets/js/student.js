@@ -105,3 +105,18 @@ submitBtn.addEventListener('click', async function (e) {
     toastr.success('操作成功')
     getStudentData()
 })
+
+//删除学员
+tbody.addEventListener('click', async function (e) {
+    if (e.target.classList.contains('btn-danger')) {
+        if (confirm('您确定删除吗？')) {
+            const { id } = e.target.dataset
+            const res = await axios({ url: 'student/delete', method: 'delete', params: { id } })
+            if (res.data.code === 0) {
+                toastr.success(`${res.data.message}`)
+            } else {
+                toastr.error(`${res.data.message}`)
+            }
+        }
+    }
+})

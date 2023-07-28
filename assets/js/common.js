@@ -33,12 +33,11 @@ axios.interceptors.response.use(function (response) {
 }, function (error) {
     // 超出 2xx 范围的状态码都会触发该函数。
     // 对响应错误做点什么
-    //
     if (error.response.data.code === 1) {
-        // localStorage.removeItem('token')
-        // toastr.error('身份认证已过期，请重新登录')
+        localStorage.removeItem('token')
+        toastr.error('身份认证已过期，请重新登录')
         setTimeout(() => {
-            // location.href = 'login.html'
+            location.href = 'login.html'
         }, 1500);
     }
     //结束进度条
