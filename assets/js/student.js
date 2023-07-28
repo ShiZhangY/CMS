@@ -68,10 +68,10 @@ form.addEventListener('reset', function () {
     county.innerHTML = '<option>--县--</option>'
 })
 //点击确认
-submitBtn.addEventListener('click', function (e) {
+submitBtn.addEventListener('click', async function (e) {
     e.preventDefault()
     const data = serialize(form, { hash: true, empty: true })
-    const id = data.id
+    const { id, age, name, phone, salary, truesalary } = data
     delete data.id
     console.log(data);
     //表单非空校验
@@ -81,9 +81,26 @@ submitBtn.addEventListener('click', function (e) {
             return
         }
     }
+    if (!/^[\u4E00-\u9FA5]{2,10}(·[\u4E00-\u9FA5]{2,10}){0,2}$/.test(name)) {
+        toastr.error('姓名不符合规范2-10')
+        return
+    }
+    if (!/^[0-9]{2}$/.test(age)) {
+        toastr.error('年龄不符合规范')
+        return
+    }
+    if (!/^[0-9]{11}$/.test(phone)) {
+        toastr.error('手机号不符合规范11位')
+        return
+    }
+    if (!/^(?:[1-9][0-9][0-9]{1,3}|99999)$/.test(salary)) {
+        toastr.error('薪资不符合规范100-99999')
+        return
+    }
     if (province.value == '--省--' || city.value == '--市--' || county.value == '--县--') {
         toastr.error('表单某项为空，请检查')
         return
-
     }
+    const res = await axios({ url: 'student/add', method: 'post', data })
+    console.log(res);
 })
