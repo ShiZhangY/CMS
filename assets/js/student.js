@@ -29,6 +29,7 @@ const modal = new bootstrap.Modal('#addModal')//modal bootstrap对象
 const addStudentBtn = document.querySelector('.show-modal-btn')//添加学员按钮
 const form = document.querySelector('.add-form')//表单
 const submitBtn = document.querySelector('.col-sm-10 .btn-primary')//确认按钮
+const resetBtn = document.querySelector('.col-sm-10 .btn-secondary')
 
 const province = document.querySelector('[name=province]')
 const city = document.querySelector('[name=city]')
@@ -56,14 +57,33 @@ city.addEventListener('change', async function () {
 //点击添加学员
 addStudentBtn.addEventListener('click', async function () {
     modal.show()//弹出模态框
-    form.reset()//重置表单
+})
+//点击重置按钮重置表单
+resetBtn.addEventListener('click', function () {
+    form.reset()
 })
 //重置表单时重置下拉列表值
 form.addEventListener('reset', function () {
     city.innerHTML = '<option>--市--</option>'
     county.innerHTML = '<option>--县--</option>'
 })
+//点击确认
 submitBtn.addEventListener('click', function (e) {
     e.preventDefault()
-    console.log(111);
+    const data = serialize(form, { hash: true, empty: true })
+    const id = data.id
+    delete data.id
+    console.log(data);
+    //表单非空校验
+    for (const key in data) {
+        if (data[key] == '') {
+            toastr.error('表单某项为空，请检查')
+            return
+        }
+    }
+    if (province.value == '--省--' || city.value == '--市--' || county.value == '--县--') {
+        toastr.error('表单某项为空，请检查')
+        return
+
+    }
 })
