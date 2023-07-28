@@ -29,7 +29,8 @@ const modal = new bootstrap.Modal('#addModal')//modal bootstrap对象
 const addStudentBtn = document.querySelector('.show-modal-btn')//添加学员按钮
 const form = document.querySelector('.add-form')//表单
 const submitBtn = document.querySelector('.col-sm-10 .btn-primary')//确认按钮
-const resetBtn = document.querySelector('.col-sm-10 .btn-secondary')
+const resetBtn = document.querySelector('.col-sm-10 .btn-secondary')//重置按钮
+const addModalLabel = document.querySelector('#addModalLabel')//模态框标题
 
 const province = document.querySelector('[name=province]')
 const city = document.querySelector('[name=city]')
@@ -44,13 +45,11 @@ async function initializeProvince() {
 initializeProvince()
 province.addEventListener('change', async function () {
     const res = await axios({ url: 'geo/city', params: { pname: province.value } })
-    console.log(res);
     const str = res.data.reduce((a, b) => a + `<option>${b}</option>`, '<option>--市--</option>')
     city.innerHTML = str
 })
 city.addEventListener('change', async function () {
     const res = await axios({ url: 'geo/county', params: { pname: province.value, cname: city.value } })
-    console.log(res);
     const str = res.data.reduce((a, b) => a + `<option>${b}</option>`, '<option>--县--</option>')
     county.innerHTML = str
 })
@@ -106,8 +105,9 @@ submitBtn.addEventListener('click', async function (e) {
     getStudentData()
 })
 
-//删除学员
+//删除和表单回填
 tbody.addEventListener('click', async function (e) {
+    //删除学员
     if (e.target.classList.contains('btn-danger')) {
         if (confirm('您确定删除吗？')) {
             const { id } = e.target.dataset
@@ -118,5 +118,30 @@ tbody.addEventListener('click', async function (e) {
                 toastr.error(`${res.data.message}`)
             }
         }
+    }
+    if (e.target.classList.contains('btn-primary')) {
+        const { id } = e.target.dataset
+        console.log(id);
+        addModalLabel.innerText = '修改学员信息' //修改模态框标题
+        modal.show()//弹出模态框
+        //根据id获取学员详细信息
+        const res = await axios({ url: 'student/one', params: { id } })
+        const data = res.data.data
+        //初始化省市县数据
+        const cityRes = await axios({ url: 'geo/city', params: { pname: data.province } })
+        const cityStr = cityRes.data.reduce((a, b) => a + `<option>${b}</option>`, '<option>--市--</option>')
+        city.innerHTML = cityStr
+
+        const countyRes = await axios({ url: 'geo/county', params: { pname: data.province, cname: data.city } })
+        const countyStr = countyRes.data.reduce((a, b) => a + `<option>${b}</option>`, '<option>--县--</option>')
+        county.innerHTML = countyStr
+        //回填单选按钮
+        document.querySelector(`.form-check-input[value='${data.sex}']`).checked = true
+        //回填其他输入框
+        form.querySelectorAll('[name]').forEach(a => {
+            if (a.type !== 'radio') {
+                a.value = data[a.name]
+            }
+        })
     }
 })
