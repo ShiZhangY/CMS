@@ -56,6 +56,8 @@ city.addEventListener('change', async function () {
 //点击添加学员
 addStudentBtn.addEventListener('click', async function () {
     modal.show()//弹出模态框
+    addModalLabel.innerText = '录入新学员'
+    form.reset()
 })
 //点击重置按钮重置表单
 resetBtn.addEventListener('click', function () {
@@ -69,7 +71,7 @@ form.addEventListener('reset', function () {
 //点击确认
 submitBtn.addEventListener('click', async function (e) {
     e.preventDefault()
-    const data = serialize(form, { hash: true, empty: true })
+    let data = serialize(form, { hash: true, empty: true })
     const { id, age, name, phone, salary, truesalary } = data
     delete data.id
     console.log(data);
@@ -93,14 +95,30 @@ submitBtn.addEventListener('click', async function (e) {
         return
     }
     if (!/^(?:[1-9][0-9][0-9]{1,3}|99999)$/.test(salary)) {
-        toastr.error('薪资不符合规范100-99999')
+        toastr.error('期望薪资不符合规范100-99999')
+        return
+    }
+    if (!/^(?:[1-9][0-9][0-9]{1,3}|99999)$/.test(truesalary)) {
+        toastr.error('实际薪资不符合规范100-99999')
         return
     }
     if (province.value == '--省--' || city.value == '--市--' || county.value == '--县--') {
         toastr.error('表单某项为空，请检查')
         return
     }
-    await axios({ url: 'student/add', method: 'post', data })
+    let url = ''
+    let method = ''
+    console.log(addModalLabel.innerText);
+    if (addModalLabel.innerText === '录入新学员') {
+        url = 'student/add'
+        method = 'post'
+    } else {
+        console.log(111);
+        url = 'student/update'
+        method = 'put'
+        data = { id, ...data }
+    }
+    await axios({ url, method, data })
     toastr.success('操作成功')
     getStudentData()
 })
@@ -119,6 +137,7 @@ tbody.addEventListener('click', async function (e) {
             }
         }
     }
+    //编辑学员数据回填
     if (e.target.classList.contains('btn-primary')) {
         const { id } = e.target.dataset
         console.log(id);
