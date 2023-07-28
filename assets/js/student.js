@@ -101,6 +101,7 @@ submitBtn.addEventListener('click', async function (e) {
         toastr.error('表单某项为空，请检查')
         return
     }
-    const res = await axios({ url: 'student/add', method: 'post', data })
-    console.log(res);
+    await axios({ url: 'student/add', method: 'post', data })
+    toastr.success('操作成功')
+    getStudentData()
 })
