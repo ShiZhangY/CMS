@@ -10,11 +10,11 @@ async function renderScoreData() {
         str += `<tr>
         <th scope="row">${key}</th>
         <td>${data[key].name}</td>
-        <td class="score">${data[key].score[0]}</td>
-        <td class="score">${data[key].score[1]}</td>
-        <td class="score">${data[key].score[2]}</td>
-        <td class="score">${data[key].score[3]}</td>
-        <td class="score">${data[key].score[4]}</td>
+        <td class="score" data-batch="1">${data[key].score[0]}</td>
+        <td class="score" data-batch="2">${data[key].score[1]}</td>
+        <td class="score" data-batch="3">${data[key].score[2]}</td>
+        <td class="score" data-batch="4">${data[key].score[3]}</td>
+        <td class="score" data-batch="5">${data[key].score[4]}</td>
       </tr>`
     }
     tbody.innerHTML = str
@@ -34,13 +34,25 @@ tbody.addEventListener('dblclick', function (e) {
         document.querySelector('input').focus()
     }
 })
-
 //失去焦点事件
-tbody.addEventListener('blur', function (e) {
-    if (e.target.tagName === 'INPUT') {
-        console.log(e.target.value);
-        console.log(e.target.dataset.id);
-
-        e.target.parentNode.removeChild(e.target);
+tbody.addEventListener('blur', async function (e) {
+    try {
+        if (e.target.tagName === 'INPUT') {
+            const data = {
+                "stu_id": e.target.dataset.id,
+                "batch": e.target.parentNode.dataset.batch,
+                "score": e.target.value
+            }
+            await axios({ url: 'score/entry', method: 'post', data })
+            e.target.parentNode.removeChild(e.target);
+            toastr.success('修改成功')
+            setTimeout(() => {
+                renderScoreData()
+            }, 200);
+        }
+    } catch (error) {
+        toastr.error('成绩必须1-100之间')
+        console.dir(error);
     }
+
 }, true)
