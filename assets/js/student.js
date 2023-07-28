@@ -27,6 +27,8 @@ getStudentData()
 
 const modal = new bootstrap.Modal('#addModal')//modal bootstrap对象
 const addStudentBtn = document.querySelector('.show-modal-btn')//添加学员按钮
+const form = document.querySelector('.add-form')//表单
+const submitBtn = document.querySelector('.col-sm-10 .btn-primary')//确认按钮
 
 const province = document.querySelector('[name=province]')
 const city = document.querySelector('[name=city]')
@@ -51,8 +53,17 @@ city.addEventListener('change', async function () {
     const str = res.data.reduce((a, b) => a + `<option>${b}</option>`, '<option>--县--</option>')
     county.innerHTML = str
 })
-//添加学员
+//点击添加学员
 addStudentBtn.addEventListener('click', async function () {
-    modal.show()
-
+    modal.show()//弹出模态框
+    form.reset()//重置表单
+})
+//重置表单时重置下拉列表值
+form.addEventListener('reset', function () {
+    city.innerHTML = '<option>--市--</option>'
+    county.innerHTML = '<option>--县--</option>'
+})
+submitBtn.addEventListener('click', function (e) {
+    e.preventDefault()
+    console.log(111);
 })
