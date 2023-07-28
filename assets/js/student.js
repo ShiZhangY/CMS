@@ -3,7 +3,6 @@ const tbody = document.querySelector('tbody')//渲染内容区域
 //渲染学生基本信息
 async function getStudentData() {
     const res = await axios({ url: 'student/list' })
-    console.log(res.data.data);
     const str = res.data.data.reduce((a, { id, name, age, sex, group, phone, salary, truesalary, province }) => a + `
         <tr>
             <th scope="row">${id}</th>
